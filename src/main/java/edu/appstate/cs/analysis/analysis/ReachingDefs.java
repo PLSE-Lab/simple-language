@@ -17,26 +17,28 @@ public class ReachingDefs {
     public static class Def {
         private String name;
         private String loc;
-        public Def(String name, String loc) {
+        private boolean isDeclaration;
+        public Def(String name, String loc, boolean isDeclaration) {
             this.name = name;
             this.loc = loc;
+            this.isDeclaration = isDeclaration;
         }
 
         @Override
         public String toString() {
-            return String.format("[name: %s, loc: %s]", name, loc);
+            return String.format("[name: %s, loc: %s, isDeclaration: %s]", name, loc, isDeclaration);
         }
 
         @Override
         public boolean equals(Object o) {
             if (o == null || getClass() != o.getClass()) return false;
             Def def = (Def) o;
-            return Objects.equals(name, def.name) && Objects.equals(loc, def.loc);
+            return Objects.equals(name, def.name) && Objects.equals(loc, def.loc) && isDeclaration == def.isDeclaration;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(name, loc);
+            return Objects.hash(name, loc, isDeclaration);
         }
     }
 
@@ -159,7 +161,7 @@ public class ReachingDefs {
 
         @Override
         public Set<Def> visitAssignStmt(AssignStmt assignStmt) {
-            return Set.of(new Def(assignStmt.getIdent(), cfg.getNodeId(new Node.StmtNode(assignStmt))));
+            return Set.of(new Def(assignStmt.getIdent(), cfg.getNodeId(new Node.StmtNode(assignStmt)), false));
         }
 
         @Override
@@ -224,8 +226,7 @@ public class ReachingDefs {
 
         @Override
         public Set<Def> visitDeclStmt(DeclStmt declStmt) {
-            // TODO: Revisit this
-            return Set.of();
+            return Set.of(new Def(declStmt.getIdent(), cfg.getNodeId(new Node.StmtNode(declStmt)), true));
         }
 
         @Override
