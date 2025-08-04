@@ -119,7 +119,13 @@ public class ReachingDefs {
                 }
                 reachIn.put(nLabel, defsFromPredecessors);
 
-                // TODO: Compute reach out!
+                // Reach Out is the defs that reach this node (Reach In), minus
+                // the defs this node kills (kills), plus the defs this node
+                // creates (gen).
+                Set<Def> reachOutForNode = new HashSet<>(oldReachIn.get(nLabel));
+                reachOutForNode.removeAll(kills.get(nLabel));
+                reachOutForNode.addAll(gen.get(nLabel));
+                reachOut.put(nLabel, reachOutForNode);
             }
 
         } while (!reachIn.equals(oldReachIn) || !reachOut.equals(oldReachOut));
