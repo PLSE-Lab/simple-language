@@ -24,6 +24,18 @@ public class ReachingDefs {
             this.isDeclaration = isDeclaration;
         }
 
+        public String getName() {
+            return name;
+        }
+
+        public String getLoc() {
+            return loc;
+        }
+
+        public boolean isDeclaration() {
+            return isDeclaration;
+        }
+
         @Override
         public String toString() {
             return String.format("[name: %s, loc: %s, isDeclaration: %s]", name, loc, isDeclaration);

@@ -1,6 +1,7 @@
 package edu.appstate.cs.analysis;
 
 import edu.appstate.cs.analysis.analysis.ReachingDefs;
+import edu.appstate.cs.analysis.analysis.UseBeforeDef;
 import edu.appstate.cs.analysis.ast.HelloWorld;
 import edu.appstate.cs.analysis.ast.StmtList;
 import edu.appstate.cs.analysis.cfg.CFG;
@@ -83,6 +84,11 @@ public class Analysis {
                                     terminal.writer().println("Location " + key + ": " + def);
                                 }
                             }
+                        }
+                        UseBeforeDef useBeforeDef = new UseBeforeDef(cfg, defs);
+                        Set<UseBeforeDef.UseBeforeDefError> errors = useBeforeDef.computeUseBeforeDefErrors();
+                        for (UseBeforeDef.UseBeforeDefError error : errors) {
+                            terminal.writer().println("Error: " + error);
                         }
                     }
                 } else if (contents.equalsIgnoreCase("#help")) {
